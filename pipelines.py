@@ -8,18 +8,21 @@
 
 from itemadapter import ItemAdapter
 from nltk.tokenize import casual_tokenize
+import json
 
 
 class HtwEnPipeline:
     def process_item(self, item, spider):
         url = item['url']
         text = item['text']
-        line = '{}\t{}\n'.format(url, casual_tokenize(text))
-        self.file.write(line)
+        # line = '{}\t{}\n'.format(url, casual_tokenize(text))
+        # self.file.write(line)
+        json_line = json.dumps({"url": url, "text": str.strip(text)}) + "\n"
+        self.file.write(json_line)
         return item
 
     def open_spider(self, spider):
-        self.file = open('items.txt', 'w')
+        self.file = open('items.jsonl', 'w')
 
     def close_spider(self, spider):
         self.file.close()
